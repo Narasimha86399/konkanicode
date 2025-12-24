@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+  <meta charset="UTF-8" />
+  <title>Devanagari to Konkani Transliteration</title>
+
+  <style>
+    /* Removed non-standard font-face definition as the file 'konkani.ttf' is not available */
+    /* @font-face {
+      font-family: 'Konkani';
+      src: url('konkani.ttf') format('truetype');
+    } */
+
+    body {
+      font-family: sans-serif; /* Set a default fallback font */
+      padding: 20px;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px 10px;
+      background-color: #80004d;
+      color: white;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .Konkani-logo { /* Renamed Tulu-logo to Konkani-logo for consistency */
+      width: 120px;
+      height: auto;
+      margin-bottom: 10px;
+      border-radius: 50%;
+      background-color: white;
+      padding: 5px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin: 0;
+    }
+
+    nav {
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #ccc;
+    }
+
+    nav a {
+      color: #80004d;
+      margin: 0 20px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 18px;
+      transition: color 0.3s;
+    }
+    
+    nav a:hover {
+        color: #b30066;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin-bottom: 15px;
+      padding: 15px;
+      font-size: 18px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    footer {
+      background-color: #80004d;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .OutputText {
+      font-size: 24px;
+      padding: 10px;
+      white-space: pre-wrap;
+      background: #ffffff;
+      min-height: 100px;
+      border: 2px solid #80004d;
+    }
+
+    .font-selector {
+      margin: 10px 0 20px;
+    }
+
+    select {
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #80004d;
+    }
+    
+    /* Using generic names for fonts since the actual font files are not provided */
+    .mallige {
+      font-family: 'Times New Roman', serif; 
+    }
+
+    .mandara {
+      font-family: 'Arial', sans-serif;
+    }
+
+    .copy-button {
+      padding: 10px 20px; 
+      font-size: 16px; 
+      background-color: #80004d; 
+      color: white; 
+      border: none; 
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .copy-button:hover {
+        background-color: #a30066;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <img src="kundapura.jpg" alt="Konkani-logo" class="Konkani-logo">
+    <h1>Konkan</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Konkani Letters</a> <a href="konkani-transliterate.html">Devanagari Fonts To Konkani Fonts</a> <a href="flashcard.html">Flashcards</a>
+    <a href="konkaniwords.html">Konkani Words</a> </nav>
+
+  <h2>Devanagari Fonts To Konkani Transliteration</h2>
+
+  <textarea id="inputText" placeholder="Type Devanagari text..."></textarea>
+
+  <div class="font-selector">
+    <label for="fontSelect"><strong>Choose Konkani Font:</strong> </label> <select id="fontSelect" onchange="changeFont()">
+      <option value="Mallige">Mallige (Fallback: Times New Roman)</option>
+      <option value="Mandara">Mandara (Fallback: Arial)</option>
+    </select>
+  </div>
+
+  <h2>In Konkani Script :</h2>
+  <textarea id="outputText" class="OutputText" readonly placeholder="Konkani lipiyalli..." style="font-family: 'Times New Roman', serif;"></textarea>
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <button onclick="copyOutput(this)" class="copy-button">
+      Copy Output
+    </button>
+  </div>
+
+  <footer>
+      &copy; 2025 Konkan Transliteration
+  </footer>
+ 
+  <script>
+    // CRITICAL FIX: Removed erroneous spaces from key characters that were causing issues
+    const mapping = {
+      'अ': 'A', 'आ': 'À', 'इ': 'I', 'ई': 'Ì', 'उ': 'U', 'ऊ': 'Ù',
+      'ऋ': 'R',
+      'ए': 'E', 'ऐ': 'È', 'ओ': 'O', 'औ': 'Ò',
+      'क': 'k', 'ख': 'K', 'ग': 'g', 'घ': 'G', 'ङ': 'Z',
+      'च': 'c', 'छ': 'C', 'ज': 'j', 'झ': 'J', 'ञ': 'z',
+      'ट': 'q', 'ठ': 'Q', 'ड': 'w', 'ढ': 'W', 'ण': 'N',
+      'त': 't', 'थ': 'T', 'द': 'd', 'ध': 'D', 'न': 'n',
+      'प': 'p', 'फ': 'P', 'ब': 'b', 'भ': 'B', 'म': 'm',
+      'य': 'y', 'र': 'r', 'ल': 'l', 'ळ': 'L', 'व': 'v',
+      'श': 'S', 'ष': 'x', 'स': 's', 'ह': 'h',
+      'ा': 'a', 'ि': 'i', 'ी': 'F', 'ु': 'u', 'ू': 'X',
+      'ृ': 'R', 'े': 'e', 'ै': 'áe',
+      'ो': 'ea', 'ौ': 'áea',
+      'ं': 'M', 'ः': 'H', '्': 'f', 'ॅ': 'ä', 'ॉ': 'äa',
+    
+      // Conjuncts (The provided conjunct mappings are unusual and may need verification based on the specific Konkani script font you are using)
+      'क्': 'V', 'ग्': 'Ã', 'च्': 'Â', 'ज्': 'Æ', 'ण्': 'Î', 'त्': 'Ú',
+      'न्': 'Í', 'प्': 'Ï', 'म्': 'Ë', 'र्': 'Á',
+      'ल्': 'o', 'व्': 'Û', 'श्': 'Ö', 'ष्': 'Õ', 'स्': 'Ô',
+      'ह्': 'Ä', 'ळ्': 'Ê', 'क्ष': 'Y', 'ङ्क': 'è', 'ङ्ग': 'Ü', 'ज्ञ': 'Å', 'क्र': 'Çk', 'क्य': 'kÉ',
+    };
+    
+    // Define the full transliterate function
+    function transliterate(text) {
+      let result = '';
+      const chars = [...text];
+      
+      for (let i = 0; i < chars.length; i++) {
+        const cur = chars[i];
+        
+        // 1. Check for multi-character conjuncts (e.g., 'क्ष', 'ज्ञ')
+        if (i + 2 <= chars.length) {
+            const threeChar = cur + chars[i+1] + chars[i+2];
+            if (mapping[threeChar]) {
+                result += mapping[threeChar];
+                i += 2;
+                continue;
+            }
+        }
+        
+        // 2. Check for two-character conjuncts (e.g., 'ङ्क', 'क्र')
+        if (i + 1 <= chars.length) {
+            const twoChar = cur + chars[i+1];
+            if (mapping[twoChar]) {
+                result += mapping[twoChar];
+                i += 1;
+                continue;
+            }
+        }
+
+        const next = chars[i + 1] || '';
+        
+        // 3. Handle Consonant + Vowel Signs (Matras)
+        if (cur.match(/[क-ह]/)) {
+          let transliterated = mapping[cur] || cur;
+          
+          // Check for '्' (virama) + Consonant (handled by two-character conjuncts above, but here for general 'हलंत')
+          if (next === '्') {
+              // Defer to conjunct logic if the next two characters form a known conjunct
+              if (mapping[cur + next + chars[i+2]] || mapping[cur + next]) {
+                  // Do nothing here, let the conjunct logic handle it or map '्' as 'f'
+              } else {
+                  result += transliterated + (mapping[next] || next);
+                  i++; // Consume the '्'
+                  continue;
+              }
+          }
+          // Check for 'ि' (Short i) - SWAP ORDER
+    if (next === 'ि') {
+        result += mapping[next] + transliterated; // Adds 'i' before the consonant
+        i++; 
+        continue;
+    }
+          // Check for all other matras. The order matters here for `áe` vs `e`
+          if (next === 'ौ') { // ौ
+              result += 'àea' + transliterated;
+              i++;
+              continue;
+          }
+          if (next === 'ै') { // ै
+              result += 'áe' + transliterated;
+              i++;
+              continue;
+          }
+          if (next === 'ो') { // ो
+              result += 'e' + transliterated + 'a'; // This mapping appears odd but is based on your provided 'ो': 'ea' and 'ौ': 'àea'
+              i++;
+              continue;
+          }
+         
+          if (next === 'े') { // े
+              result += 'e' + transliterated;
+              i++;
+              continue;
+          }
+          if (mapping[next] && next.match(/[ािीुूृंःॅॉ]/)) { // Other matras
+              result += transliterated + mapping[next];
+              i++;
+              continue;
+          }
+        
+        }
+        
+        // 4. Handle independent vowels and general characters
+        result += mapping[cur] || cur;
+      }
+      
+      return result;
+    }
+
+    // Event listener for input text
+    document.getElementById('inputText').addEventListener('input', () => {
+      const input = document.getElementById('inputText').value;
+      const output = transliterate(input);
+      document.getElementById('outputText').value = output;
+    });
+
+    // Function to change the font of the output
+    function changeFont() {
+      const font = document.getElementById('fontSelect').value;
+      
+      // Map selector values to CSS class names/fallbacks
+      if (font === 'Mallige') {
+          document.getElementById('outputText').style.fontFamily = `'Times New Roman', serif`;
+      } else if (font === 'Mandara') {
+          document.getElementById('outputText').style.fontFamily = `'Arial', sans-serif`;
+      }
+      // If the user adds the actual @font-face, the font-family should be the declared name.
+      // document.getElementById('outputText').style.fontFamily = font; 
+    }
+
+    // Function to copy the output text
+    function copyOutput(button) {
+      const outputBox = document.getElementById("outputText");
+      outputBox.select();
+      outputBox.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(outputBox.value).then(() => {
+        const originalText = button.textContent;
+        button.textContent = "✅ Translated!";
+        button.style.backgroundColor = "#008000"; // Green color
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.style.backgroundColor = "#80004d"; // Original color
+        }, 1500); // Reset button text after 1.5 seconds
+      }).catch(err => {
+        console.error('Could not copy text: ', err);
+        alert("Failed to copy text.");
+      });
+    }
+
+    // Set initial font on load
+    document.addEventListener('DOMContentLoaded', () => {
+        changeFont(); 
+    });
+  </script>
+</body>
+</html>
