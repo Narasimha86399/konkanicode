@@ -186,7 +186,6 @@
       if (matra === 'ै') return 'áe' + base;
       if (matra === 'ो') return 'e' + base + 'a';
       if (matra === 'ौ') return 'áe' + base + 'a';
-      if (matra === 'र्') return  base + 'Á';
       if (mapping[matra]) return base + mapping[matra];
       return base + matra;
     }
@@ -206,6 +205,18 @@
         const next = chars[i + 1] || '';
         const third = chars[i + 2] || '';
         const fourth = chars[i + 3] || '';
+        // Rule: र् + any consonant -> Consonant + 'Á' (e.g., र्क -> kÁ, र्म -> mÁ)
+if (cur === 'र' && next === '्' && isConsonant(third)) {
+  const base = (mapping[third] || third) + 'Á';
+  if (isMatra(fourth)) {
+    result += applyMatra(base, fourth);
+    i += 3; // consume 'र', '्', third, and fourth (matra)
+  } else {
+    result += base;
+    i += 2; // consume 'र', '्', and third
+  }
+  continue;
+}
 
         // 1. Any Consonant + ् + र -> 'Ç' + Consonant (e.g., क्+र -> Çk, प्+र -> Çp)
         if (isConsonant(cur) && next === '्' && third === 'र') {
